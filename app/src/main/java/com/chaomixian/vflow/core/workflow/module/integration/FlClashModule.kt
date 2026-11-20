@@ -32,6 +32,12 @@ class FlClashModule : BaseModule() {
         private const val FLCLASH_START_ACTION = "com.follow.clash.action.START"
         private const val FLCLASH_STOP_ACTION = "com.follow.clash.action.STOP"
         private const val FLCLASH_TOGGLE_ACTION = "com.follow.clash.action.TOGGLE"
+
+        /**
+         * FlClash 0.9.x 起，START/STOP/TOGGLE 三个控制 Action 由 QuickActionActivity 接收
+         * （旧版承载它们的 TempActivity 已被移除）。
+         */
+        private const val FLCLASH_CONTROL_ACTIVITY = "$FLCLASH_PACKAGE.QuickActionActivity"
     }
 
     override val id = "vflow.integration.flclash"
@@ -119,7 +125,7 @@ class FlClashModule : BaseModule() {
         return try {
             onProgress(ProgressUpdate("正在发送 FlClash $action 控制 Intent..."))
             val intent = Intent(intentAction)
-                .setComponent(ComponentName(FLCLASH_PACKAGE, "$FLCLASH_PACKAGE.TempActivity"))
+                .setComponent(ComponentName(FLCLASH_PACKAGE, FLCLASH_CONTROL_ACTIVITY))
                 .addCategory(Intent.CATEGORY_DEFAULT)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 .addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK)
